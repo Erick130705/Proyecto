@@ -1,3 +1,14 @@
 import java.util.ArrayList;
 
-public class GestorObjetos
+public class GestorObjetos{
+    private ArrayList<ObjetoPerdido> almacen; 
+
+    public GestorObjetos() {
+        this.almacen = new ArrayList<>();
+    }
+
+    public void agregarObjeto(ObjetoPerdido objeto) {
+        almacen.add(objeto);
+        System.out.println("Objeto agregado: " + objeto.getNombre());
+    }
+
