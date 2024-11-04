@@ -8,3 +8,16 @@ public class Accesorio extends ObjetoPerdido {
         this.color = color;
     }
 
+    public String getTipo() { return tipo; }
+    public void setTipo(String tipo) { this.tipo = tipo; }
+
+    public String getColor() { return color; }
+    public void setColor(String color) { this.color = color; }
+
+    @Override
+    public void mostrarInfo() {
+        super.mostrarInfo();
+        System.out.println("Tipo: " + tipo);
+        System.out.println("Color: " + color);
+    }
+}
