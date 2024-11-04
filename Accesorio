@@ -1,0 +1,10 @@
+public class Accesorio extends ObjetoPerdido {
+    private String tipo;
+    private String color;
+
+    public Accesorio(String nombre, String descripcion, String lugarEncontrado, String fechaEncontrado, String tipo, String color) {
+        super(nombre, descripcion, lugarEncontrado, fechaEncontrado);
+        this.tipo = tipo;
+        this.color = color;
+    }
+
