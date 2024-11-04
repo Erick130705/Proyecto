@@ -3,3 +3,11 @@ public class ObjetoPerdido {
     protected String descripcion;
     protected String lugarEncontrado;
     protected String fechaEncontrado;
+
+    public ObjetoPerdido(String nombre, String descripcion, String lugarEncontrado, String fechaEncontrado) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.lugarEncontrado = lugarEncontrado;
+        this.fechaEncontrado = fechaEncontrado;
+    }
+
