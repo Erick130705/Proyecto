@@ -6,13 +6,14 @@ import java.awt.event.ActionListener;
 public class InterfazObjetosPerdidos extends JFrame {
 
     private GestorObjetos gestor;
+    private CardLayout cardLayout;
+    private JPanel cardsPanel;
+    private Usuario usuarioActual;
 
     public InterfazObjetosPerdidos() {
         gestor = new GestorObjetos();
-        setTitle("Gestión de Objetos Perdidos");
-        setSize(400, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
+        usuarioActual = null;
+    }
 
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(6, 1));
