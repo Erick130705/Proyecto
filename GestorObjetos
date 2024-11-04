@@ -12,3 +12,12 @@ public class GestorObjetos{
         System.out.println("Objeto agregado: " + objeto.getNombre());
     }
 
+    public void eliminarObjeto(String nombre) {
+        ObjetoPerdido obj = buscarPorNombre(nombre);
+        if (obj != null) {
+            almacen.remove(obj);
+            System.out.println("Objeto eliminado: " + nombre);
+        } else {
+            System.out.println("Objeto no encontrado: " + nombre);
+        }
+    }
