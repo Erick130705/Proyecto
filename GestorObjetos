@@ -1,3 +1,20 @@
+
+
+    public void mostrarTodosLosObjetos() {
+        if (almacen.isEmpty()) {
+            System.out.println("No hay objetos almacenados.");
+        } else {
+            for (ObjetoPerdido obj : almacen) {
+                obj.mostrarInfo();
+                System.out.println();
+            }
+        }
+    }
+
+    public ArrayList<ObjetoPerdido> obtenerObjetos() {
+        return almacen; 
+    }
+}
 import java.util.ArrayList;
 
 public class GestorObjetos{
