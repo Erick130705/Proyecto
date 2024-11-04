@@ -21,3 +21,12 @@ public class GestorObjetos{
             System.out.println("Objeto no encontrado: " + nombre);
         }
     }
+   public ObjetoPerdido buscarPorNombre(String nombre) {
+        for (ObjetoPerdido obj : almacen) {
+            if (obj.getNombre().equalsIgnoreCase(nombre)) {
+                return obj;
+            }
+        }
+        return null;  
+    }
+
