@@ -3,7 +3,7 @@ public class ObjetoPerdido {
     protected String descripcion;
     protected String lugarEncontrado;
     protected String fechaEncontrado;
-
+    protected String categoria; // Nuevo atributo de categoría
 
     public ObjetoPerdido(String nombre, String descripcion, String lugarEncontrado, String fechaEncontrado) {
         this.nombre = nombre;
@@ -11,7 +11,6 @@ public class ObjetoPerdido {
         this.lugarEncontrado = lugarEncontrado;
         this.fechaEncontrado = fechaEncontrado;
     }
-
 
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }
@@ -25,11 +24,16 @@ public class ObjetoPerdido {
     public String getFechaEncontrado() { return fechaEncontrado; }
     public void setFechaEncontrado(String fechaEncontrado) { this.fechaEncontrado = fechaEncontrado; }
 
-    
+    public String getCategoria() { return categoria; } // Nuevo método getter para categoría
+    public void setCategoria(String categoria) { this.categoria = categoria; } // Nuevo método setter para categoría
+
     public void mostrarInfo() {
         System.out.println("Nombre: " + nombre);
         System.out.println("Descripción: " + descripcion);
         System.out.println("Lugar Encontrado: " + lugarEncontrado);
         System.out.println("Fecha Encontrado: " + fechaEncontrado);
+        if (categoria != null) {
+            System.out.println("Categoría: " + categoria); // Mostrar categoría si existe
+        }
     }
 }
