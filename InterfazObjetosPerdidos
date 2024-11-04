@@ -1,0 +1,112 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class InterfazObjetosPerdidos extends JFrame {
+
+    private GestorObjetos gestor;
+
+    public InterfazObjetosPerdidos() {
+        gestor = new GestorObjetos();
+        setTitle("Gestión de Objetos Perdidos");
+        setSize(400, 400);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(6, 1));
+
+        // Botones
+        JButton btnRegistrar = new JButton("Registrar Usuario");
+        JButton btnIniciarSesion = new JButton("Iniciar Sesión");
+        JButton btnAgregar = new JButton("Agregar Objeto");
+        JButton btnEliminar = new JButton("Eliminar Objeto");
+        JButton btnBuscar = new JButton("Buscar Objeto");
+        JButton btnMostrarTodos = new JButton("Mostrar Todos");
+
+        btnRegistrar.addActionListener(e -> registrarUsuario());
+        btnIniciarSesion.addActionListener(e -> iniciarSesion());
+        btnAgregar.addActionListener(e -> agregarObjeto());
+        btnEliminar.addActionListener(e -> eliminarObjeto());
+        btnBuscar.addActionListener(e -> buscarObjeto());
+        btnMostrarTodos.addActionListener(e -> mostrarTodosLosObjetos());
+
+        // Añadir botones al panel
+        panel.add(btnRegistrar);
+        panel.add(btnIniciarSesion);
+        panel.add(btnAgregar);
+        panel.add(btnEliminar);
+        panel.add(btnBuscar);
+        panel.add(btnMostrarTodos);
+
+        add(panel, BorderLayout.CENTER);
+        setVisible(true);
+    }
+
+    private void registrarUsuario() {
+        String nombre = JOptionPane.showInputDialog("Nombre del usuario:");
+        String correo = JOptionPane.showInputDialog("Correo del usuario:");
+        String contrasena = JOptionPane.showInputDialog("Contraseña del usuario:");
+        
+        UsuarioBD.registrarUsuario(nombre, correo, contrasena);
+        JOptionPane.showMessageDialog(this, "Registro completado.");
+    }
+
+    private void iniciarSesion() {
+        String correo = JOptionPane.showInputDialog("Correo del usuario:");
+        String contrasena = JOptionPane.showInputDialog("Contraseña del usuario:");
+
+        if (UsuarioBD.verificarUsuario(correo, contrasena)) {
+            JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso.");
+        } else {
+            JOptionPane.showMessageDialog(this, "Credenciales incorrectas. Inténtalo de nuevo.");
+        }
+    }
+
+    private void agregarObjeto() {
+        String nombre = JOptionPane.showInputDialog("Nombre del objeto:");
+        String descripcion = JOptionPane.showInputDialog("Descripción:");
+        String lugar = JOptionPane.showInputDialog("Lugar encontrado:");
+        String fecha = JOptionPane.showInputDialog("Fecha encontrada (dd/mm/yyyy):");
+        
+        String tipoAccesorio = JOptionPane.showInputDialog("Tipo de accesorio:");
+        String color = JOptionPane.showInputDialog("Color:");
+        
+        gestor.agregarObjeto(new Accesorio(nombre, descripcion, lugar, fecha, tipoAccesorio, color));
+        JOptionPane.showMessageDialog(this, "Objeto agregado con éxito.");
+    }
+
+    private void eliminarObjeto() {
+        String nombre = JOptionPane.showInputDialog("Nombre del objeto a eliminar:");
+        gestor.eliminarObjeto(nombre);
+        JOptionPane.showMessageDialog(this, "Si existía, el objeto ha sido eliminado.");
+    }
+
+    private void buscarObjeto() {
+        String nombre = JOptionPane.showInputDialog("Nombre del objeto a buscar:");
+        ObjetoPerdido objeto = gestor.buscarPorNombre(nombre);
+        if (objeto != null) {
+            JOptionPane.showMessageDialog(this, objeto.getNombre() + " encontrado: " + objeto.getDescripcion());
+        } else {
+            JOptionPane.showMessageDialog(this, "Objeto no encontrado.");
+        }
+    }
+
+    private void mostrarTodosLosObjetos() {
+        StringBuilder info = new StringBuilder();
+        for (ObjetoPerdido obj : gestor.obtenerObjetos()) {
+            info.append(obj.getNombre()).append("\n");
+        }
+        if (info.length() == 0) {
+            JOptionPane.showMessageDialog(this, "No hay objetos almacenados.");
+        } else {
+            JOptionPane.showMessageDialog(this, info.toString(), "Objetos Perdidos", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    public static void main(String[] args) {
+        new InterfazObjetosPerdidos();
+    }
+}
+
