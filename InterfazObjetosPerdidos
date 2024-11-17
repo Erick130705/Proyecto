@@ -1,157 +1,264 @@
-import java.awt.*;
 import javax.swing.*;
+import java.awt.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
- 
+public class InterfazObjetosPerdidos extends JFrame {
 
-    private JPanel crearPanelRegistrar() {
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(5, 5, 5, 5);
+    private GestorObjetos gestor;
 
-        JTextField nombreField = new JTextField(20);
-        JTextField apellidoField = new JTextField(20);
-        JTextField usuarioField = new JTextField(20);
-        JPasswordField passwordField = new JPasswordField(20);
+    public InterfazObjetosPerdidos() {
+        gestor = new GestorObjetos();
 
-        panel.add(new JLabel("Nombre:"), gbc);
-        panel.add(nombreField, gbc);
-        panel.add(new JLabel("Apellido:"), gbc);
-        panel.add(apellidoField, gbc);
-        panel.add(new JLabel("Usuario:"), gbc);
-        panel.add(usuarioField, gbc);
-        panel.add(new JLabel("Contraseña:"), gbc);
-        panel.add(passwordField, gbc);
+        setTitle("Gestión de Objetos Perdidos");
+        setSize(500, 600);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
 
-        JButton registrarButton = new JButton("Registrar Usuario");
-        registrarButton.addActionListener(e -> {
-            String nombre = nombreField.getText();
-            String apellido = apellidoField.getText();
-            String usuario = usuarioField.getText();
-            String password = new String(passwordField.getPassword());
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout());
+        mainPanel.setBackground(new Color(230, 240, 255));
 
-            if (!nombre.isEmpty() && !apellido.isEmpty() && !usuario.isEmpty() && !password.isEmpty()) {
-                Usuario nuevoUsuario = new Usuario(nombre, apellido, usuario, password);
-                if (gestor.registrarUsuario(nuevoUsuario)) {
-                    JOptionPane.showMessageDialog(this, "Usuario registrado con éxito.");
-                    nombreField.setText("");
-                    apellidoField.setText("");
-                    usuarioField.setText("");
-                    passwordField.setText("");
-                } else {
-                    JOptionPane.showMessageDialog(this, "El usuario ya existe.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+        JPanel panelBotones = new JPanel(new GridLayout(6, 1, 10, 10));
+        panelBotones.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        panelBotones.setBackground(new Color(255, 255, 255));
+
+        JButton btnRegistrar = crearBoton("Registrar Usuario");
+        JButton btnIniciarSesion = crearBoton("Iniciar Sesión");
+        JButton btnAgregar = crearBoton("Agregar Objeto");
+        JButton btnEliminar = crearBoton("Eliminar Objeto");
+        JButton btnBuscar = crearBoton("Buscar Objeto");
+        JButton btnMostrarTodos = crearBoton("Mostrar Todos");
+
+        btnRegistrar.addActionListener(e -> mostrarFormularioRegistro());
+        btnIniciarSesion.addActionListener(e -> iniciarSesion());
+        btnAgregar.addActionListener(e -> mostrarFormularioAgregarObjeto());
+        btnEliminar.addActionListener(e -> eliminarObjeto());
+        btnBuscar.addActionListener(e -> buscarObjeto());
+        btnMostrarTodos.addActionListener(e -> mostrarObjetosPorCategoria());
+
+        panelBotones.add(btnRegistrar);
+        panelBotones.add(btnIniciarSesion);
+        panelBotones.add(btnAgregar);
+        panelBotones.add(btnEliminar);
+        panelBotones.add(btnBuscar);
+        panelBotones.add(btnMostrarTodos);
+
+        mainPanel.add(panelBotones, BorderLayout.CENTER);
+        add(mainPanel, BorderLayout.CENTER);
+
+        setVisible(true);
+    }
+
+    private JButton crearBoton(String texto) {
+        JButton button = new JButton(texto);
+        button.setFocusPainted(false);
+        button.setBackground(new Color(100, 149, 237));
+        button.setForeground(Color.WHITE);
+        button.setFont(new Font("Arial", Font.BOLD, 14));
+        button.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(70, 130, 180)),
+                BorderFactory.createEmptyBorder(10, 20, 10, 20)
+        ));
+        return button;
+    }
+
+    private void mostrarFormularioRegistro() {
+        JFrame frame = new JFrame("Registro de Usuario");
+        frame.setSize(400, 400);
+        frame.setLocationRelativeTo(this);
+
+        JPanel formPanel = new JPanel();
+        formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
+        formPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        formPanel.setBackground(new Color(245, 245, 245));
+
+        JLabel lblNombre = new JLabel("Nombre:");
+        JTextField txtNombre = new JTextField(20);
+
+        JLabel lblCorreo = new JLabel("Correo:");
+        JTextField txtCorreo = new JTextField(20);
+
+        JLabel lblContrasena = new JLabel("Contraseña:");
+        JPasswordField txtContrasena = new JPasswordField(20);
+
+        JLabel lblConfirmarContrasena = new JLabel("Confirmar Contraseña:");
+        JPasswordField txtConfirmarContrasena = new JPasswordField(20);
+
+        JButton btnRegistrar = new JButton("Registrar");
+        btnRegistrar.setBackground(new Color(34, 139, 34));
+        btnRegistrar.setForeground(Color.WHITE);
+        btnRegistrar.addActionListener(e -> {
+            String nombre = txtNombre.getText();
+            String correo = txtCorreo.getText();
+            String contrasena = new String(txtContrasena.getPassword());
+            String confirmarContrasena = new String(txtConfirmarContrasena.getPassword());
+
+            if (!contrasena.equals(confirmarContrasena)) {
+                JOptionPane.showMessageDialog(frame, "Las contraseñas no coinciden.", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+                UsuarioBD.registrarUsuario(nombre, correo, contrasena);
+                JOptionPane.showMessageDialog(frame, "Registro completado.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                frame.dispose();
             }
         });
 
-        panel.add(registrarButton, gbc);
-        return panel;
+        formPanel.add(lblNombre);
+        formPanel.add(txtNombre);
+        formPanel.add(Box.createVerticalStrut(10));
+        formPanel.add(lblCorreo);
+        formPanel.add(txtCorreo);
+        formPanel.add(Box.createVerticalStrut(10));
+        formPanel.add(lblContrasena);
+        formPanel.add(txtContrasena);
+        formPanel.add(Box.createVerticalStrut(10));
+        formPanel.add(lblConfirmarContrasena);
+        formPanel.add(txtConfirmarContrasena);
+        formPanel.add(Box.createVerticalStrut(15));
+        formPanel.add(btnRegistrar);
+
+        JScrollPane scrollPane = new JScrollPane(formPanel);
+        frame.add(scrollPane);
+        frame.setVisible(true);
     }
 
-    private JPanel crearPanelIniciarSesion() {
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(5, 5, 5, 5);
+    private void mostrarFormularioAgregarObjeto() {
+        JFrame frame = new JFrame("Agregar Objeto");
+        frame.setSize(400, 400);
+        frame.setLocationRelativeTo(this);
 
-        JTextField usuarioField = new JTextField(20);
-        JPasswordField passwordField = new JPasswordField(20);
+        JPanel formPanel = new JPanel();
+        formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
+        formPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        formPanel.setBackground(new Color(245, 245, 245));
 
-        panel.add(new JLabel("Usuario:"), gbc);
-        panel.add(usuarioField, gbc);
-        panel.add(new JLabel("Contraseña:"), gbc);
-        panel.add(passwordField, gbc);
+        JLabel lblNombre = new JLabel("Nombre del Objeto:");
+        JTextField txtNombre = new JTextField(20);
 
-        JButton loginButton = new JButton("Iniciar Sesión");
-        loginButton.addActionListener(e -> {
-            String usuario = usuarioField.getText();
-            String password = new String(passwordField.getPassword());
+        JLabel lblDescripcion = new JLabel("Descripción:");
+        JTextField txtDescripcion = new JTextField(20);
 
-            if (!usuario.isEmpty() && !password.isEmpty()) {
-                Usuario user = gestor.iniciarSesion(usuario, password);
-                if (user != null) {
-                    usuarioActual = user;
-                    JOptionPane.showMessageDialog(this, "Sesión iniciada con éxito.");
-                    usuarioField.setText("");
-                    passwordField.setText("");
-                } else {
-                    JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            } else {
-                JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
+        JLabel lblLugar = new JLabel("Lugar Encontrado:");
+        JTextField txtLugar = new JTextField(20);
+
+        JLabel lblFecha = new JLabel("Fecha Encontrado (dd/mm/yyyy):");
+        JTextField txtFecha = new JTextField(20);
+
+        JLabel lblTipoAccesorio = new JLabel("Tipo de Accesorio:");
+        JTextField txtTipoAccesorio = new JTextField(20);
+
+        JLabel lblColor = new JLabel("Color:");
+        JTextField txtColor = new JTextField(20);
+
+        JButton btnAgregar = new JButton("Agregar");
+        btnAgregar.setBackground(new Color(34, 139, 34));
+        btnAgregar.setForeground(Color.WHITE);
+
+        btnAgregar.addActionListener(e -> {
+            String nombre = txtNombre.getText();
+            String descripcion = txtDescripcion.getText();
+            String lugar = txtLugar.getText();
+            String fecha = txtFecha.getText();
+            String tipoAccesorio = txtTipoAccesorio.getText();
+            String color = txtColor.getText();
+
+            gestor.agregarObjeto(new Accesorio(nombre, descripcion, lugar, fecha, tipoAccesorio, color));
+            JOptionPane.showMessageDialog(frame, "Objeto agregado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            frame.dispose();
         });
 
-        panel.add(loginButton, gbc);
-        return panel;
+        formPanel.add(lblNombre);
+        formPanel.add(txtNombre);
+        formPanel.add(Box.createVerticalStrut(10));
+        formPanel.add(lblDescripcion);
+        formPanel.add(txtDescripcion);
+        formPanel.add(Box.createVerticalStrut(10));
+        formPanel.add(lblLugar);
+        formPanel.add(txtLugar);
+        formPanel.add(Box.createVerticalStrut(10));
+        formPanel.add(lblFecha);
+        formPanel.add(txtFecha);
+        formPanel.add(Box.createVerticalStrut(10));
+        formPanel.add(lblTipoAccesorio);
+        formPanel.add(txtTipoAccesorio);
+        formPanel.add(Box.createVerticalStrut(10));
+        formPanel.add(lblColor);
+        formPanel.add(txtColor);
+        formPanel.add(Box.createVerticalStrut(15));
+        formPanel.add(btnAgregar);
+
+        JScrollPane scrollPane = new JScrollPane(formPanel);
+        frame.add(scrollPane);
+        frame.setVisible(true);
     }
 
-    private JPanel crearPanelAgregarObjeto() {
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(5, 5, 5, 5);
+    private void mostrarObjetosPorCategoria() {
+        JFrame frame = new JFrame("Objetos por Categoría");
+        frame.setSize(400, 400);
+        frame.setLocationRelativeTo(this);
 
-        JTextField nombreField = new JTextField(20);
-        JTextField descripcionField = new JTextField(20);
-        JTextField lugarField = new JTextField(20);
-        JTextField fechaField = new JTextField(20);
+        JPanel panelObjetos = new JPanel();
+        panelObjetos.setLayout(new BoxLayout(panelObjetos, BoxLayout.Y_AXIS));
+        panelObjetos.setBackground(new Color(245, 245, 245));
 
-        panel.add(new JLabel("Nombre del objeto:"), gbc);
-        panel.add(nombreField, gbc);
-        panel.add(new JLabel("Descripción:"), gbc);
-        panel.add(descripcionField, gbc);
-        panel.add(new JLabel("Lugar encontrado:"), gbc);
-        panel.add(lugarField, gbc);
-        panel.add(new JLabel("Fecha encontrada (dd/mm/yyyy):"), gbc);
-        panel.add(fechaField, gbc);
+        Map<String, StringBuilder> categorias = new HashMap<>();
 
-        JButton agregarButton = new JButton("Agregar Objeto");
-        agregarButton.addActionListener(e -> {
-            if (usuarioActual == null) {
-                JOptionPane.showMessageDialog(this, "Debe iniciar sesión para agregar objetos.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            String nombre = nombreField.getText();
-            String descripcion = descripcionField.getText();
-            String lugar = lugarField.getText();
-            String fecha = fechaField.getText();
-
-            if (!nombre.isEmpty() && !descripcion.isEmpty() && !lugar.isEmpty() && !fecha.isEmpty()) {
-                Accesorio nuevoAccesorio = new Accesorio(nombre, descripcion, lugar, fecha);
-                gestor.agregarObjeto(nuevoAccesorio);
-                JOptionPane.showMessageDialog(this, "Objeto agregado con éxito.");
-                nombreField.setText("");
-                descripcionField.setText("");
-                lugarField.setText("");
-                fechaField.setText("");
-            } else {
-                JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        });
-
-        panel.add(agregarButton, gbc);
-        return panel;
-    }
-
-    private JPanel crearPanelEliminarObjeto() {
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(5, 5, 5, 5);
-
-        JTextField idField = new JTextField(20);
-
-        panel.add(new JLabel("ID del objeto a eliminar:"), gbc);
-        panel.add(idField, gbc);
-
-        JButton eliminarButton = new
+        for (ObjetoPerdido obj : gestor.obtenerObjetos()) {
+            categorias.computeIfAbsent(obj.getCategoria(), k -> new StringBuilder())
+                      .append("- ").append(obj.getNombre()).append("\n");
         }
+
+        for (Map.Entry<String, StringBuilder> entry : categorias.entrySet()) {
+            JLabel lblCategoria = new JLabel(entry.getKey() + ":");
+            lblCategoria.setFont(new Font("Arial", Font.BOLD, 14));
+            lblCategoria.setForeground(new Color(100, 149, 237));
+
+            JTextArea txtObjetos = new JTextArea(entry.getValue().toString());
+            txtObjetos.setEditable(false);
+            txtObjetos.setBackground(new Color(230, 240, 255));
+            txtObjetos.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+            panelObjetos.add(lblCategoria);
+            panelObjetos.add(new JScrollPane(txtObjetos));
+            panelObjetos.add(Box.createVerticalStrut(10));
+        }
+
+        JScrollPane scrollPane = new JScrollPane(panelObjetos);
+        frame.add(scrollPane);
+        frame.setVisible(true);
+    }
+
+    private void iniciarSesion() {
+        String correo = JOptionPane.showInputDialog("Correo del usuario:");
+        String contrasena = JOptionPane.showInputDialog("Contraseña del usuario:");
+
+        if (UsuarioBD.verificarUsuario(correo, contrasena)) {
+            JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso.");
+        } else {
+            JOptionPane.showMessageDialog(this, "Credenciales incorrectas. Inténtalo de nuevo.");
+        }
+    }
+
+    private void eliminarObjeto() {
+        String nombre = JOptionPane.showInputDialog("Nombre del objeto a eliminar:");
+        gestor.eliminarObjeto(nombre);
+        JOptionPane.showMessageDialog(this, "Si existía, el objeto ha sido eliminado.");
+    }
+
+    private void buscarObjeto() {
+        String nombre = JOptionPane.showInputDialog("Nombre del objeto a buscar:");
+        ObjetoPerdido objeto = gestor.buscarPorNombre(nombre);
+        if (objeto != null) {
+            JOptionPane.showMessageDialog(this, objeto.getNombre() + " encontrado: " + objeto.getDescripcion());
+        } else {
+            JOptionPane.showMessageDialog(this, "Objeto no encontrado.");
+        }
+    }
+
+    public static void main(String[] args) {
+        new InterfazObjetosPerdidos();
+    }
+}
+
