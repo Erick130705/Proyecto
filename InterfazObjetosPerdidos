@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class InterfazObjetosPerdidos extends JFrame {
@@ -12,25 +11,25 @@ public class InterfazObjetosPerdidos extends JFrame {
         gestor = new GestorObjetos();
 
         setTitle("Gestión de Objetos Perdidos");
-        setSize(500, 600);
+        setSize(600, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
-        mainPanel.setBackground(new Color(230, 240, 255));
+        mainPanel.setBackground(new Color(245, 245, 245));
 
-        JPanel panelBotones = new JPanel(new GridLayout(6, 1, 10, 10));
-        panelBotones.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        panelBotones.setBackground(new Color(255, 255, 255));
+        JPanel panelBotones = new JPanel(new GridLayout(6, 1, 15, 15));
+        panelBotones.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+        panelBotones.setBackground(new Color(255, 250, 240));
 
-        JButton btnRegistrar = crearBoton("Registrar Usuario");
-        JButton btnIniciarSesion = crearBoton("Iniciar Sesión");
-        JButton btnAgregar = crearBoton("Agregar Objeto");
-        JButton btnEliminar = crearBoton("Eliminar Objeto");
-        JButton btnBuscar = crearBoton("Buscar Objeto");
-        JButton btnMostrarTodos = crearBoton("Mostrar Todos");
+        JButton btnRegistrar = crearBoton("Registrar Usuario", new Color(204, 102, 255));
+        JButton btnIniciarSesion = crearBoton("Iniciar Sesión", new Color(102, 153, 255));
+        JButton btnAgregar = crearBoton("Agregar Objeto", new Color(102, 255, 153));
+        JButton btnEliminar = crearBoton("Eliminar Objeto", new Color(255, 102, 102));
+        JButton btnBuscar = crearBoton("Buscar Objeto", new Color(255, 204, 102));
+        JButton btnMostrarTodos = crearBoton("Mostrar Todos", new Color(153, 255, 255));
 
         btnRegistrar.addActionListener(e -> mostrarFormularioRegistro());
         btnIniciarSesion.addActionListener(e -> iniciarSesion());
@@ -52,28 +51,28 @@ public class InterfazObjetosPerdidos extends JFrame {
         setVisible(true);
     }
 
-    private JButton crearBoton(String texto) {
+    private JButton crearBoton(String texto, Color colorFondo) {
         JButton button = new JButton(texto);
         button.setFocusPainted(false);
-        button.setBackground(new Color(100, 149, 237));
+        button.setBackground(colorFondo);
         button.setForeground(Color.WHITE);
-        button.setFont(new Font("Arial", Font.BOLD, 14));
+        button.setFont(new Font("Verdana", Font.BOLD, 16));
         button.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(70, 130, 180)),
-                BorderFactory.createEmptyBorder(10, 20, 10, 20)
+                BorderFactory.createLineBorder(colorFondo.darker()),
+                BorderFactory.createEmptyBorder(15, 25, 15, 25)
         ));
         return button;
     }
 
     private void mostrarFormularioRegistro() {
         JFrame frame = new JFrame("Registro de Usuario");
-        frame.setSize(400, 400);
+        frame.setSize(450, 450);
         frame.setLocationRelativeTo(this);
 
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
-        formPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        formPanel.setBackground(new Color(245, 245, 245));
+        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        formPanel.setBackground(new Color(245, 245, 255));
 
         JLabel lblNombre = new JLabel("Nombre:");
         JTextField txtNombre = new JTextField(20);
@@ -88,7 +87,7 @@ public class InterfazObjetosPerdidos extends JFrame {
         JPasswordField txtConfirmarContrasena = new JPasswordField(20);
 
         JButton btnRegistrar = new JButton("Registrar");
-        btnRegistrar.setBackground(new Color(34, 139, 34));
+        btnRegistrar.setBackground(new Color(102, 204, 102));
         btnRegistrar.setForeground(Color.WHITE);
         btnRegistrar.addActionListener(e -> {
             String nombre = txtNombre.getText();
@@ -107,16 +106,16 @@ public class InterfazObjetosPerdidos extends JFrame {
 
         formPanel.add(lblNombre);
         formPanel.add(txtNombre);
-        formPanel.add(Box.createVerticalStrut(10));
+        formPanel.add(Box.createVerticalStrut(15));
         formPanel.add(lblCorreo);
         formPanel.add(txtCorreo);
-        formPanel.add(Box.createVerticalStrut(10));
+        formPanel.add(Box.createVerticalStrut(15));
         formPanel.add(lblContrasena);
         formPanel.add(txtContrasena);
-        formPanel.add(Box.createVerticalStrut(10));
+        formPanel.add(Box.createVerticalStrut(15));
         formPanel.add(lblConfirmarContrasena);
         formPanel.add(txtConfirmarContrasena);
-        formPanel.add(Box.createVerticalStrut(15));
+        formPanel.add(Box.createVerticalStrut(20));
         formPanel.add(btnRegistrar);
 
         JScrollPane scrollPane = new JScrollPane(formPanel);
@@ -126,13 +125,13 @@ public class InterfazObjetosPerdidos extends JFrame {
 
     private void mostrarFormularioAgregarObjeto() {
         JFrame frame = new JFrame("Agregar Objeto");
-        frame.setSize(400, 400);
+        frame.setSize(450, 450);
         frame.setLocationRelativeTo(this);
 
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
-        formPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        formPanel.setBackground(new Color(245, 245, 245));
+        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        formPanel.setBackground(new Color(245, 255, 245));
 
         JLabel lblNombre = new JLabel("Nombre del Objeto:");
         JTextField txtNombre = new JTextField(20);
@@ -153,7 +152,7 @@ public class InterfazObjetosPerdidos extends JFrame {
         JTextField txtColor = new JTextField(20);
 
         JButton btnAgregar = new JButton("Agregar");
-        btnAgregar.setBackground(new Color(34, 139, 34));
+        btnAgregar.setBackground(new Color(102, 153, 255));
         btnAgregar.setForeground(Color.WHITE);
 
         btnAgregar.addActionListener(e -> {
@@ -171,22 +170,22 @@ public class InterfazObjetosPerdidos extends JFrame {
 
         formPanel.add(lblNombre);
         formPanel.add(txtNombre);
-        formPanel.add(Box.createVerticalStrut(10));
+        formPanel.add(Box.createVerticalStrut(15));
         formPanel.add(lblDescripcion);
         formPanel.add(txtDescripcion);
-        formPanel.add(Box.createVerticalStrut(10));
+        formPanel.add(Box.createVerticalStrut(15));
         formPanel.add(lblLugar);
         formPanel.add(txtLugar);
-        formPanel.add(Box.createVerticalStrut(10));
+        formPanel.add(Box.createVerticalStrut(15));
         formPanel.add(lblFecha);
         formPanel.add(txtFecha);
-        formPanel.add(Box.createVerticalStrut(10));
+        formPanel.add(Box.createVerticalStrut(15));
         formPanel.add(lblTipoAccesorio);
         formPanel.add(txtTipoAccesorio);
-        formPanel.add(Box.createVerticalStrut(10));
+        formPanel.add(Box.createVerticalStrut(15));
         formPanel.add(lblColor);
         formPanel.add(txtColor);
-        formPanel.add(Box.createVerticalStrut(15));
+        formPanel.add(Box.createVerticalStrut(20));
         formPanel.add(btnAgregar);
 
         JScrollPane scrollPane = new JScrollPane(formPanel);
@@ -196,69 +195,27 @@ public class InterfazObjetosPerdidos extends JFrame {
 
     private void mostrarObjetosPorCategoria() {
         JFrame frame = new JFrame("Objetos por Categoría");
-        frame.setSize(400, 400);
+        frame.setSize(450, 450);
         frame.setLocationRelativeTo(this);
 
         JPanel panelObjetos = new JPanel();
         panelObjetos.setLayout(new BoxLayout(panelObjetos, BoxLayout.Y_AXIS));
-        panelObjetos.setBackground(new Color(245, 245, 245));
+        panelObjetos.setBackground(new Color(255, 245, 240));
 
         Map<String, StringBuilder> categorias = new HashMap<>();
 
         for (ObjetoPerdido obj : gestor.obtenerObjetos()) {
             categorias.computeIfAbsent(obj.getCategoria(), k -> new StringBuilder())
-                      .append("- ").append(obj.getNombre()).append("\n");
+                    .append("- ").append(obj.getNombre()).append("\n");
         }
 
         for (Map.Entry<String, StringBuilder> entry : categorias.entrySet()) {
             JLabel lblCategoria = new JLabel(entry.getKey() + ":");
             lblCategoria.setFont(new Font("Arial", Font.BOLD, 14));
-            lblCategoria.setForeground(new Color(100, 149, 237));
+            lblCategoria.setForeground(new Color(102, 102, 255));
 
             JTextArea txtObjetos = new JTextArea(entry.getValue().toString());
             txtObjetos.setEditable(false);
             txtObjetos.setBackground(new Color(230, 240, 255));
-            txtObjetos.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-            panelObjetos.add(lblCategoria);
-            panelObjetos.add(new JScrollPane(txtObjetos));
-            panelObjetos.add(Box.createVerticalStrut(10));
-        }
-
-        JScrollPane scrollPane = new JScrollPane(panelObjetos);
-        frame.add(scrollPane);
-        frame.setVisible(true);
-    }
-
-    private void iniciarSesion() {
-        String correo = JOptionPane.showInputDialog("Correo del usuario:");
-        String contrasena = JOptionPane.showInputDialog("Contraseña del usuario:");
-
-        if (UsuarioBD.verificarUsuario(correo, contrasena)) {
-            JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso.");
-        } else {
-            JOptionPane.showMessageDialog(this, "Credenciales incorrectas. Inténtalo de nuevo.");
-        }
-    }
-
-    private void eliminarObjeto() {
-        String nombre = JOptionPane.showInputDialog("Nombre del objeto a eliminar:");
-        gestor.eliminarObjeto(nombre);
-        JOptionPane.showMessageDialog(this, "Si existía, el objeto ha sido eliminado.");
-    }
-
-    private void buscarObjeto() {
-        String nombre = JOptionPane.showInputDialog("Nombre del objeto a buscar:");
-        ObjetoPerdido objeto = gestor.buscarPorNombre(nombre);
-        if (objeto != null) {
-            JOptionPane.showMessageDialog(this, objeto.getNombre() + " encontrado: " + objeto.getDescripcion());
-        } else {
-            JOptionPane.showMessageDialog(this, "Objeto no encontrado.");
-        }
-    }
-
-    public static void main(String[] args) {
-        new InterfazObjetosPerdidos();
-    }
-}
+            txtObjetos.setBorder(BorderFactory.createEmptyBorder(5, 5, 5
 
